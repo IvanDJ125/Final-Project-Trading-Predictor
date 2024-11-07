@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Historical Data</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .stock-info {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .stock-info h3 {
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+        .stock-info p {
+            margin: 5px 0;
+        }
+        .error {
+            color: red;
+        }
+        pre {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        #plot, #scatter-plot {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+    </style>
+    <script>
+        async function fetchStockInfo() {
+            const ticker = document.getElementById('ticker').value;
+
+            if (!ticker) {
+                alert('Please enter a ticker symbol.');
+                return;
+            }
+
+            const response = await fetch('/get-stock-info', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticker })
+            });
+
+            const stockData = await response.json();
+
+            if (response.ok) {
+                const stockInfo = `
+                    <h3>Name:</h3><p>${stockData.name || "N/A"}</p>
+                    <h3>Description:</h3><p>${stockData.description || "No description available."}</p>
+                    <h3>Industry:</h3><p>${stockData.industry || "N/A"}</p>
+                    <h3>Sector:</h3><p>${stockData.sector || "N/A"}</p>
+                    <h3>Website:</h3><p>${stockData.website || "N/A"}</p>
+                    <h3>CEO:</h3><p>${stockData.ceo || "N/A"}</p>
+                    <h3>Employees:</h3><p>${stockData.employees || "N/A"}</p>
+                `;
+                document.getElementById('stock-info').innerHTML = stockInfo;
+                document.getElementById('stock-info').classList.add('stock-info');
+            } else {
+                document.getElementById('stock-info').innerHTML = `Error: ${stockData.error}`;
+                document.getElementById('stock-info').classList.add('error');
+            }
+        }
+
+        async function fetchHistoricalData() {
+            const ticker = document.getElementById('ticker').value;
+            const intervalScatter = document.getElementById('interval-scatter').value || 'day';
+            const timeRangeScatter = document.getElementById('time-range-scatter').value;
+
+            if (!ticker) {
+                alert('Please enter a ticker symbol.');
+                return;
+            }
+
+            // Fetch scatter plot data
+            const scatterResponse = await fetch('/get-historical-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticker, interval: intervalScatter, timeRange: timeRangeScatter }) // Include scatter plot options
+            });
+
+            const scatterData = await scatterResponse.json();
+
+            if (scatterResponse.ok) {
+                // Plot the scatter plot first
+                const scatterGraphResponse = await fetch('/plot-scatter-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(scatterData) // Send the data for plotting
+                });
+
+                const scatterGraphData = await scatterGraphResponse.json();
+                const scatterDiv = document.getElementById('scatter-plot');
+
+                // Plotly new plot function for scatter
+                Plotly.newPlot(scatterDiv, JSON.parse(scatterGraphData).data, JSON.parse(scatterGraphData).layout);
+
+                // Now fetch data for the candlestick chart
+                const intervalCandlestick = document.getElementById('interval-candlestick').value || 'day';
+                const timeRangeCandlestick = document.getElementById('time-range-candlestick').value;
+
+                const candlestickResponse = await fetch('/get-historical-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticker, interval: intervalCandlestick, timeRange: timeRangeCandlestick }) // Include candlestick options
+                });
+
+                const candlestickData = await candlestickResponse.json();
+
+                if (candlestickResponse.ok) {
+                    // Plot the candlestick chart
+                    const candlestickGraphResponse = await fetch('/plot-historical-data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(candlestickData) // Send the data for plotting
+                    });
+
+                    const candlestickGraphData = await candlestickGraphResponse.json();
+                    const plotDiv = document.getElementById('plot');
+
+                    // Plotly new plot function for candlestick
+                    Plotly.newPlot(plotDiv, JSON.parse(candlestickGraphData).data, JSON.parse(candlestickGraphData).layout);
+                } else {
+                    document.getElementById('result').textContent = `Error: ${candlestickData.error}`;
+                }
+            } else {
+                document.getElementById('result').textContent = `Error: ${scatterData.error}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Enter Stock Ticker for Historical Data</h1>
+    <form onsubmit="event.preventDefault(); fetchStockInfo();">
+        <label for="ticker">Ticker Symbol:</label>
+        <input type="text" id="ticker" required><br><br>
+        
+        <button type="submit">Get Stock Info</button>
+    </form>
+    <div id="stock-info"></div>
+
+    <h2>Scatter Plot of Historical Closing Prices</h2>
+    <form onsubmit="event.preventDefault(); fetchHistoricalData();">
+        <label for="interval-scatter">Interval:</label>
+        <select id="interval-scatter">
+            <option value="day">Day</option>
+            <option value="minute">Minute</option>
+            <option value="hour">Hour</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+        </select><br><br>
+
+        <label for="time-range-scatter">Time Range:</label>
+        <select id="time-range-scatter">
+            <option value="1d">Today</option>
+            <option value="1w">This Week</option>
+            <option value="1m">This Month</option>
+            <option value="3m">Last 3 Months</option>
+            <option value="6m">Last 6 Months</option>
+            <option value="ytd">Year to Date</option>
+            <option value="1y">Last Year</option>
+            <option value="5y">Last 5 Years</option>
+            <option value="max">Max Available</option>
+        </select><br><br>
+
+        <button type="submit">Get Historical Data</button>
+    </form>
+
+    <div id="scatter-plot"></div> <!-- New div for the scatter plot -->
+    <h2>Candlestick Chart of Historical Prices</h2>
+    <form onsubmit="event.preventDefault(); fetchHistoricalData();">
+        <label for="interval-candlestick">Interval:</label>
+        <select id="interval-candlestick">
+            <option value="day">Day</option>
+            <option value="minute">Minute</option>
+            <option value="hour">Hour</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+        </select><br><br>
+
+        <label for="time-range-candlestick">Time Range:</label>
+        <select id="time-range-candlestick">
+            <option value="1d">Today</option>
+            <option value="1w">This Week</option>
+            <option value="1m">This Month</option>
+            <option value="3m">Last 3 Months</option>
+            <option value="6m">Last 6 Months</option>
+            <option value="ytd">Year to Date</option>
+            <option value="1y">Last Year</option>
+            <option value="5y">Last 5 Years</option>
+            <option value="max">Max Available</option>
+        </select><br><br>
+
+        <button type="submit">Get Historical Data</button>
+    </form>
+
+    <pre id="result"></pre>
+    <div id="plot"></div> <!-- Div for the candlestick plot -->
+</body>
+</html>
