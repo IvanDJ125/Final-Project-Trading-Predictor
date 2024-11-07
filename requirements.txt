@@ -1,0 +1,16 @@
+pandas
+scikit-learn
+numpy 
+requests
+pickledb
+python-dotenv
+flask
+datetime
+simplejson
+plotly
+plotly-express
+polygon-api-client
+flask
+polygon
+python-dotenv
+application
