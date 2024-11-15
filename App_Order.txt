@@ -1,0 +1,35 @@
+Order of what the application will do:
+1. User ticker input
+2. Stock description
+3. User can choose the time frame (standard should be 1y & 1d):
+    Period options
+- 1d (1 day)
+- 5d (5 days)
+- 1mo (1 month)
+- 3mo (3 months)
+- 6mo (6 months)
+- 1y (1 year)
+- 2y (2 years)
+- 5y (5 years)
+- 10y (10 years)
+- ytd (Year to Date, from January 1 of the current year to present)
+- max (all available data from the stock’s listing date)
+    Interval options:
+- 1m (1 minute) - Max period: 7 days
+- 2m (2 minutes) - Max period: 60 days
+- 5m (5 minutes) - Max period: 60 days
+- 15m (15 minutes) - Max period: 60 days
+- 30m (30 minutes) - Max period: 60 days
+- 60m (1 hour) - Max period: 730 days (about 2 years)
+- 90m (90 minutes) - Max period: 730 days
+- 1h (1 hour) - Max period: 730 days
+- 1d (1 day) - Max period: max
+- 5d (5 days) - Max period: max
+- 1wk (1 week) - Max period: max
+- 1mo (1 month) - Max period: max
+- 3mo (3 months) - Max period: max
+4. Indicators on a table and their respective suggestions
+5. Graph Indicators
+6. Graph Prophet Model
+7. Graph ARIMA Model
+8. Potentially including LSTM model
