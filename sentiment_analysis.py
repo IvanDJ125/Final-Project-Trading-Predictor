@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 from newsapi.newsapi_client import NewsApiClient
+import dotenv
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
 import pandas as pd
 import re
+import textblob
 from textblob import TextBlob
+import vaderSentiment
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,6 +16,7 @@ import requests
 import json
 import io
 import base64
+import langdetect
 from langdetect import detect
 
 # Load environment variables

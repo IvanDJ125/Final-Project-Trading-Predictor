@@ -1,68 +1,67 @@
 source,title,date,sentiment,polarity,compound
-Yahoo Entertainment,microsoft corporation msft ai chief predicts  breakthrough in persistent memory paving way for transformative ai interactions,2024/11/09,neutral,0.0,0.0
-Quartz India,microsoft and nasa have a new ai tool to put satellite data at your fingertips,2024/11/14,neutral,0.13636363636363635,0.0
-Quartz India,microsofts president has a warning about china,2024/11/13,negative,0.0,-0.34
-Quartz India,googles gemini ai chatbot now has an iphone app,2024/11/14,neutral,0.0,0.0
-Quartz India,openai is launching an ai agent that can do work for people,2024/11/13,neutral,0.0,0.0
+Quartz India,apple is going after google and amazon with a new smart home competitor,2024/11/13,positive,0.17532467532467533,0.5267
+Quartz India,amazons top  black friday deals,2024/11/12,positive,0.16666666666666669,0.1779
+Quartz India,walmarts top  black friday deals,2024/11/13,positive,0.16666666666666669,0.2023
+Quartz India,targets top  black friday deals,2024/11/14,positive,0.16666666666666669,0.2023
 Quartz India,trees dont grow to the sky nelson peltz says the stock markets trump euphoria wont last,2024/11/14,positive,0.0,0.6486
-Quartz India,taco bell is bringing back some classics,2024/11/08,neutral,0.0,0.0
 Quartz India,bitcoins wild election year ride in  charts,2024/11/13,neutral,0.1,0.0
-Quartz India,corporate america is gearing up for donald trumps tariffs tax cuts  and possibly his revenge,2024/11/08,negative,0.0,-0.6808
-PCWorld,how to easily update windows subsystem for linux s kernel,2024/11/11,positive,0.43333333333333335,0.34
+Quartz India,tesla is now worth more than gm ford toyota and other car companies  combined,2024/11/13,positive,0.225,0.2263
+Quartz India,elon musks tesla is ready for a new era thanks to donald trump,2024/11/11,positive,0.1787878787878788,0.6597
 Forbes,postpresidential election stocks bonds and the fed,2024/11/10,neutral,0.0,0.0
+Forbes,these closedend funds pay  a month on every k invested,2024/11/12,negative,0.0,-0.1027
 Forbes,equities soar on trump election despite a slowing economy,2024/11/09,neutral,0.0,0.0
 CoinDesk,bitcoin touches recordhigh k adds almost k in a week,2024/11/11,neutral,0.0,0.0
-Investor's Business Daily,nvidia stock called mustown onceinalifetime opportunity,2024/11/11,positive,0.0,0.4215
-Investor's Business Daily,shopify stock jumps on q revenue ecommerce volume beat,2024/11/12,neutral,0.0,0.0
-Investor's Business Daily,how to invest rules for when to buy and sell stocks in bull and bear markets,2024/11/08,neutral,0.0,0.0
-Yahoo Entertainment,tevogen bio partners with microsoft corporation msft to leverage advanced ai tools for biotech research in healthcare,2024/11/11,positive,0.4,0.25
-Yahoo Entertainment,terry smith shuns nvidia shares on fears ai hype is overblown,2024/11/11,negative,0.0,-0.1531
+Yahoo Entertainment,stock market today dow sp  nasdaq extend roaring rally as bitcoin tops ,2024/11/11,positive,0.0,0.6124
+Yahoo Entertainment,evercore identifies apple inc aapl as key stock to watch amid potential impact of trump tariffs and policy shifts on it hardware firms,2024/11/11,neutral,0.0,0.0
+Applech2.com,compulocks新デザインのmac mini に対応したセキュリティロックマウントmaclocks mac mini m  security mount with lock headを発売,2024/11/14,positive,0.0,0.34
+Macdailynews.com,citi reaffirms apple as top stock pick,2024/11/13,positive,0.5,0.2023
+Macdailynews.com,evercore names apple a stock to watch in president trumps second term,2024/11/13,neutral,0.0,0.0
+Macdailynews.com,apple assembler foxconns q profit rises  beats forecasts,2024/11/14,positive,0.0,0.4404
+Yahoo Entertainment,trumps second term will have enormous implications for big tech heres why,2024/11/13,neutral,0.0,0.0
+Investopedia,buffetts berkshire buys shares of dominos pizza and pool corp dumps apple stock,2024/11/14,negative,0.0,-0.128
 Investor's Business Daily,lumentum stock aaoi drive telecomfiber optics group rebound,2024/11/10,neutral,0.0,0.0
 Investor's Business Daily,dow jones rises as nvidiabacked ai stock dives smci falls further as deadline looms live coverage,2024/11/13,negative,0.06818181818181818,-0.1531
-Yahoo Entertainment,whats next for nuclear stocks after regulatory pushback,2024/11/09,neutral,0.0,0.0
-Investor's Business Daily,nuclear company reports earnings fresh off regulators rejecting amazon deal,2024/11/13,neutral,0.3,0.0
 Yahoo Entertainment,inflation and retail sales data greet a roaring stock market rally what to know this week,2024/11/10,positive,0.0,0.3182
-Observer,ai safety institute defends the future of us tech policy as trumps new era looms,2024/11/12,positive,0.06818181818181818,0.296
-Yahoo Entertainment,microsoft corporation msft ken fishers top tech stock for ai and cloud dominance,2024/11/10,positive,0.5,0.3818
 Thedividendguyblog.com,best  stocks to buy now and hold forever  part  podcast,2024/11/13,positive,1.0,0.6369
-Observer,the  executives behind nvidias unprecedented ai domination,2024/11/13,negative,0.09999999999999998,-0.0516
-BusinessLine,sobha limited posts  pat jump to  crore for q,2024/11/14,negative,-0.07142857142857142,-0.2263
-Biztoc.com,market clubhouse morning memo  november th  trade strategy for spy qqq aapl msft nvda googl meta and tsla,2024/11/11,neutral,0.0,0.0
-Biztoc.com,market clubhouse morning memo  november th  trade strategy for spy qqq aapl msft nvda googl meta and tsla,2024/11/12,neutral,0.0,0.0
-Biztoc.com,if you bought  share of microsoft at its ipo heres how many shares you would own now,2024/11/09,positive,0.55,0.5267
-Biztoc.com,microsofts  billion investment in openai may be some of the best money ever spent according to certain wall street analysts,2024/11/10,positive,0.37142857142857144,0.743
+ETF Daily News,direxion daily aapl bear x shares nasdaqaapd short interest up  in october,2024/11/13,positive,0.0,0.6369
+Biztoc.com,before the iphone  sales of iphone  were steady,2024/11/11,neutral,0.16666666666666666,0.0
+ETF Daily News,kurv yield premium strategy apple aapl etf nysearcaaapy shares up   heres what happened,2024/11/09,positive,0.0,0.296
+Biztoc.com,thursday links daily realities,2024/11/14,neutral,0.0,0.0
+Biztoc.com,walmarts top  black friday deals,2024/11/13,positive,0.16666666666666669,0.2023
 Biztoc.com, magnificent seven stock thats a screaming bargain right now,2024/11/11,positive,0.6428571428571428,0.4767
-Biztoc.com,better artificial intelligence stock palantir vs microsoft,2024/11/11,positive,-0.04999999999999999,0.7184
-ETF Daily News,microsoft co nasdaqmsft shares purchased by abich financial wealth management llc,2024/11/12,positive,0.0,0.6597
-ETF Daily News,comerica bank has  million stock holdings in microsoft co nasdaqmsft,2024/11/13,neutral,0.0,0.0
-ETF Daily News,thrivent financial for lutherans has  billion stock holdings in microsoft co nasdaqmsft,2024/11/08,neutral,0.0,0.0
-ETF Daily News,microsoft co nasdaqmsft stake cut by longview partners guernsey ltd,2024/11/08,negative,0.0,-0.2732
-ETF Daily News, shares in microsoft co nasdaqmsft acquired by fairscale capital llc,2024/11/09,positive,0.0,0.296
-ETF Daily News,microsoft co nasdaqmsft shares sold by profund advisors llc,2024/11/09,positive,0.0,0.296
-ETF Daily News,matrix private capital group llc purchases  shares of microsoft co nasdaqmsft,2024/11/13,positive,0.0,0.296
-ETF Daily News,stanley capital management llc takes  million position in microsoft co nasdaqmsft,2024/11/10,neutral,0.0,0.0
-ETF Daily News,smith thornton advisors llc invests  million in microsoft co nasdaqmsft,2024/11/13,neutral,0.0,0.0
-ETF Daily News,peloton wealth strategists has  million holdings in microsoft co nasdaqmsft,2024/11/13,positive,0.0,0.4939
-ETF Daily News,arista wealth management llc increases stock holdings in microsoft co nasdaqmsft,2024/11/08,positive,0.0,0.4939
-ETF Daily News,asset management group inc purchases  shares of microsoft co nasdaqmsft,2024/11/08,positive,0.0,0.5719
-ETF Daily News,epoch investment partners inc has  million stake in microsoft co nasdaqmsft,2024/11/09,neutral,0.0,0.0
-ETF Daily News,gabelli funds llc sells  shares of microsoft co nasdaqmsft,2024/11/09,positive,0.0,0.296
-ETF Daily News,battery global advisors llc has  holdings in microsoft co nasdaqmsft,2024/11/10,neutral,0.0,0.0
-ETF Daily News,providence capital advisors llc has  million stock holdings in microsoft co nasdaqmsft,2024/11/10,neutral,0.0,0.0
-ETF Daily News,microsoft co nasdaqmsft shares purchased by dundas partners llp,2024/11/12,positive,0.0,0.296
-ETF Daily News,microsoft co nasdaqmsft shares sold by semmax financial advisors inc,2024/11/11,positive,0.0,0.296
-ETF Daily News,microsoft co nasdaqmsft shares bought by employees retirement system of texas,2024/11/12,positive,0.0,0.296
-ETF Daily News,microsoft co nasdaqmsft holdings increased by lighthouse investment partners llc,2024/11/13,positive,0.0,0.2732
-ETF Daily News,balanced wealth group llc sells  shares of microsoft co nasdaqmsft,2024/11/08,positive,0.0,0.6597
-ETF Daily News,sompo asset management co ltd has  million holdings in microsoft co nasdaqmsft,2024/11/08,positive,0.0,0.3612
-ETF Daily News,rep william r keating purchases shares of microsoft co nasdaqmsft,2024/11/09,positive,0.0,0.296
-ETF Daily News,dimension capital management llc reduces holdings in microsoft co nasdaqmsft,2024/11/12,neutral,0.0,0.0
-ETF Daily News,kayne anderson rudnick investment management llc boosts position in microsoft co nasdaqmsft,2024/11/08,positive,0.0,0.3182
-Motley Fool Australia,down  in  months why this asx  tech stock now looks attractive,2024/11/13,positive,0.32222222222222224,0.4404
+Biztoc.com,market clubhouse morning memo  november th  trade strategy for spy qqq aapl msft nvda googl meta and tsla,2024/11/12,neutral,0.0,0.0
+Biztoc.com,market clubhouse morning memo  november th  trade strategy for spy qqq aapl msft nvda googl meta and tsla,2024/11/11,neutral,0.0,0.0
+Biztoc.com,its official apple needs ai to be a winner,2024/11/10,positive,0.0,0.5859
+Biztoc.com,warren buffetts apple stake reduction spurs b cash surgeanalysts speculate this could be the reason behind berkshire hathaways massive cash pile,2024/11/10,neutral,-0.2,0.0
+ETF Daily News,providence capital advisors llc has  million position in apple inc nasdaqaapl,2024/11/11,neutral,0.0,0.0
+ETF Daily News,apple inc nasdaqaapl is sfmg llcs th largest position,2024/11/12,neutral,0.0,0.0
+ETF Daily News,nkcfo llc purchases  shares of apple inc nasdaqaapl,2024/11/09,positive,0.0,0.296
+ETF Daily News,point hong kong ltd buys shares of  apple inc nasdaqaapl,2024/11/13,positive,0.0,0.296
+ETF Daily News,front street capital management inc decreases stake in apple inc nasdaqaapl,2024/11/12,neutral,0.0,0.0
+ETF Daily News,apple inc nasdaqaapl is rw investment management llcs th largest position,2024/11/10,neutral,0.0,0.0
+ETF Daily News,apple inc nasdaqaapl is elite wealth management incs rd largest position,2024/11/09,positive,0.0,0.4939
+ETF Daily News,apple inc nasdaqaapl shares bought by quest investment management llc,2024/11/10,positive,0.0,0.296
+ETF Daily News,apple inc nasdaqaapl is toronto dominion banks rd largest position,2024/11/12,neutral,0.0,0.0
+ETF Daily News,fairscale capital llc invests  million in apple inc nasdaqaapl,2024/11/11,neutral,0.0,0.0
+ETF Daily News,apple inc nasdaqaapl stock position lessened by kingfisher capital llc,2024/11/13,neutral,0.0,0.0
+ETF Daily News,jpb foundation sells  shares of apple inc nasdaqaapl,2024/11/12,positive,0.0,0.296
+ETF Daily News,semmax financial advisors inc purchases  shares of apple inc nasdaqaapl,2024/11/12,positive,0.0,0.296
+ETF Daily News,apple inc nasdaqaapl position decreased by cyrus j lawrence llc,2024/11/11,neutral,-0.4,0.0
+ETF Daily News,beck capital management llc buys  shares of apple inc nasdaqaapl,2024/11/11,positive,0.0,0.296
+ETF Daily News,apg asset management us inc sells  shares of apple inc nasdaqaapl,2024/11/13,positive,0.0,0.5719
+ETF Daily News,alti global inc lowers position in apple inc nasdaqaapl,2024/11/13,negative,0.0,-0.128
+ETF Daily News,apple inc nasdaqaapl shares acquired by wulff hansen  co,2024/11/12,positive,0.0,0.296
+ETF Daily News,kayne anderson rudnick investment management llc purchases  shares of apple inc nasdaqaapl,2024/11/10,positive,0.0,0.296
+ETF Daily News,chesapeake wealth management lowers position in apple inc nasdaqaapl,2024/11/09,positive,0.0,0.4019
+ETF Daily News,apple inc nasdaqaapl shares sold by ensign peak advisors inc,2024/11/09,positive,0.0,0.296
+ETF Daily News,apple inc nasdaqaapl stake boosted by sei investments co,2024/11/09,positive,0.0,0.3612
+ETF Daily News,legacy financial advisors inc grows holdings in apple inc nasdaqaapl,2024/11/10,neutral,0.0,0.0
+ETF Daily News,element pointe advisors llc reduces stock holdings in apple inc nasdaqaapl,2024/11/13,neutral,0.0,0.0
+ETF Daily News,old north state trust llc boosts stake in apple inc nasdaqaapl,2024/11/12,positive,0.1,0.6808
+ETF Daily News,summit trail advisors llc boosts position in apple inc nasdaqaapl,2024/11/09,positive,0.0,0.3182
+ETF Daily News,delap wealth advisory llc sells  shares of apple inc nasdaqaapl,2024/11/11,positive,0.0,0.6597
 Motley Fool Australia,invest  into these  asx etfs,2024/11/12,neutral,0.0,0.0
-Motley Fool Australia,down  in  months why i think paladin energy shares are now a bargain buy,2024/11/13,positive,-0.15555555555555556,0.6249
-Freerepublic.com,microsoft edge antitrump,2024/11/12,neutral,0.0,0.0
-BusinessLine,puravankara limited reports  crore loss in q,2024/11/09,negative,-0.07142857142857142,-0.4939
+Motley Fool Australia, asx etfs to buy and hold until ,2024/11/09,neutral,0.0,0.0
 Stockcharts.com,riding the stock markets wave how to maximize your gains,2024/11/12,positive,0.0,0.34
-Askubuntu.com,python and pip package location,2024/11/14,neutral,0.0,0.0
-BusinessLine,sobha limited posts  pat jump to  crore for q,2024/11/14,negative,-0.07142857142857142,-0.2263
+Pypi.org,iinvestimentpy added to pypi,2024/11/12,neutral,0.0,0.0
+Realinvestmentadvice.com,election over now what for the market,2024/11/09,neutral,0.0,0.0
