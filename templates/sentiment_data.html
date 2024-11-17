@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment News Analysis</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Sentiment News Analysis</h1>
+        <form action="/sentiment" method="get" class="mt-4">
+            <div class="form-group">
+                <label for="ticker">Enter Ticker Symbol:</label>
+                <input type="text" id="ticker" name="ticker" class="form-control" placeholder="e.g., MSFT" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze</button>
+        </form>
+
+        <div class="mt-5">
+            {% if data %}
+                <h2>Sentiment Analysis Results</h2>
+                <table class="table table-bordered table-striped mt-3">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Source</th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Sentiment</th>
+                            <th>Polarity</th>
+                            <th>Compound</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in data %}
+                            <tr>
+                                <td>{{ article.source }}</td>
+                                <td>{{ article.title }}</td>
+                                <td>{{ article.date }}</td>
+                                <td>{{ article.sentiment }}</td>
+                                <td>{{ article.polarity }}</td>
+                                <td>{{ article.compound }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
