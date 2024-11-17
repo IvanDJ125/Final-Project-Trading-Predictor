@@ -1,0 +1,15 @@
+beautifulsoup4
+PyMuPDF
+PyPDF2
+openai
+numpy
+tiktoken
+python-dotenv
+scikit-learn
+requests
+pdfkit
+pandas
+transformers
+yfinance
+fpdf
+feedparser
