@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Price Prediction App</h1>
+        <form id="search-form">
+            <input type="text" id="ticker" name="ticker" placeholder="Enter Stock Ticker" required>
+            <button type="submit">Search</button>
+        </form>
+        <div id="results">
+            <!-- Results will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#search-form').on('submit', function (e) {
+                e.preventDefault();
+                const ticker = $('#ticker').val();
+                $('#results').html('<p>Loading...</p>');
+
+                $.post('/search', { ticker: ticker }, function (data) {
+                    let stockInfoHtml = `
+                        <h2>Company Information</h2>
+                        <p><strong>Company Name:</strong> ${data.stock_info["Company Name"]}</p>
+                        <p><strong>Sector:</strong> ${data.stock_info["Sector"]}</p>
+                        <p><strong>Industry:</strong> ${data.stock_info["Industry"]}</p>
+                        <p><strong>Market Cap:</strong> ${data.stock_info["Market Cap"]}</p>
+                        <p><strong>Stock Exchange:</strong> ${data.stock_info["Stock Exchange"]}</p>
+                        <p><strong>Full-Time Employees:</strong> ${data.stock_info["Full-Time Employees"]}</p>
+                        <p><strong>Business Summary:</strong> ${data.stock_info["Business Summary"]}</p>
+                    `;
+
+                    let resultsHtml = `
+                        ${stockInfoHtml}
+                        <h3>Closing Prices</h3>
+                        ${data.closing_prices_plot}
+                        <h3>SMA (20, 50)</h3>
+                        <p>${data.sma_opinion}</p>
+                        ${data.sma_plot}
+                        <h3>RSI</h3>
+                        <p>${data.rsi_opinion}</p>
+                        ${data.rsi_plot}
+                        <h3>MACD</h3>
+                        <p>${data.macd_opinion}</p>
+                        ${data.macd_plot}
+                        <h3>Prophet Predictions</h3>
+                        <p>Latest Predicted Price: $${data.prophet_prediction.latest_price.toFixed(2)} on ${data.prophet_prediction.date}</p>
+                        ${data.prophet_plot}
+                    `;
+                    $('#results').html(resultsHtml);
+                }).fail(function (err) {
+                    $('#results').html(`<p>Error: ${err.responseJSON.error}</p>`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
