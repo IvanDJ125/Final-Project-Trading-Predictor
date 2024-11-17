@@ -1,0 +1,39 @@
+# Ignore Python virtual environment
+venv/
+env/
+ifenv/
+/workspaces/boosting-algorithms-project-tutorial_if/ifenv
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables and secrets
+.env
+.ifenv
+
+# Ignore compiled files
+*.o
+*.so
+*.out
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore specific paths
+/path/to/ignore/
+ifenv/lib/python3.12/site-packages/
+
+
+#Ignore Libraries
+libnccl.so.2
+libxgboost.so
