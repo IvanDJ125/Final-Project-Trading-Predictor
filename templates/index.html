@@ -2,143 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stock Info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Stock Information Search</h1>
-
-    <!-- Search Form -->
-    <form method="post" action="/">
-        <label for="ticker">Enter Stock Ticker:</label>
-        <input 
-            type="text" 
-            id="ticker" 
-            name="ticker" 
-            placeholder="e.g., AAPL" 
-            value="{{ ticker_symbol or '' }}" 
-            required
-        >
-        <button type="submit" name="action" value="search">Search</button>
-    </form>
-
-    {% if stock_data %}
-        <h2>Stock Information</h2>
-        <ul>
-            {% for key, value in stock_data.items() %}
-                <li><strong>{{ key }}:</strong> {{ value }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if error %}
-        <p style="color: red;">Error: {{ error }}</p>
-    {% endif %}
-
-    <!-- Graph Settings -->
-    {% if stock_data or chart_html %}
-        <h2>Graph Stock Data</h2>
-        <form method="post" action="/">
-            <input type="hidden" name="ticker" value="{{ ticker_symbol }}">
-
-            <label for="period">Select Period:</label>
-            <select id="period" name="period" required>
-                <option value="1d" {% if period == "1d" %}selected{% endif %}>1 day</option>
-                <option value="5d" {% if period == "5d" %}selected{% endif %}>5 days</option>
-                <option value="1mo" {% if period == "1mo" %}selected{% endif %}>1 month</option>
-                <option value="3mo" {% if period == "3mo" %}selected{% endif %}>3 months</option>
-                <option value="6mo" {% if period == "6mo" %}selected{% endif %}>6 months</option>
-                <option value="1y" {% if period == "1y" %}selected{% endif %}>1 year</option>
-                <option value="2y" {% if period == "2y" %}selected{% endif %}>2 years</option>
-                <option value="5y" {% if period == "5y" %}selected{% endif %}>5 years</option>
-                <option value="10y" {% if period == "10y" %}selected{% endif %}>10 years</option>
-                <option value="ytd" {% if period == "ytd" %}selected{% endif %}>Year to Date</option>
-                <option value="max" {% if period == "max" %}selected{% endif %}>Max</option>
-            </select>
-
-            <label for="interval">Select Interval:</label>
-            <select id="interval" name="interval" required>
-                <option value="1m" {% if interval == "1m" %}selected{% endif %}>1 minute (Max: 7 days)</option>
-                <option value="2m" {% if interval == "2m" %}selected{% endif %}>2 minutes (Max: 60 days)</option>
-                <option value="5m" {% if interval == "5m" %}selected{% endif %}>5 minutes (Max: 60 days)</option>
-                <option value="15m" {% if interval == "15m" %}selected{% endif %}>15 minutes (Max: 60 days)</option>
-                <option value="30m" {% if interval == "30m" %}selected{% endif %}>30 minutes (Max: 60 days)</option>
-                <option value="60m" {% if interval == "60m" %}selected{% endif %}>1 hour (Max: 730 days)</option>
-                <option value="90m" {% if interval == "90m" %}selected{% endif %}>90 minutes (Max: 730 days)</option>
-                <option value="1d" {% if interval == "1d" %}selected{% endif %}>1 day (Max: max)</option>
-                <option value="5d" {% if interval == "5d" %}selected{% endif %}>5 days (Max: max)</option>
-                <option value="1wk" {% if interval == "1wk" %}selected{% endif %}>1 week (Max: max)</option>
-                <option value="1mo" {% if interval == "1mo" %}selected{% endif %}>1 month (Max: max)</option>
-                <option value="3mo" {% if interval == "3mo" %}selected{% endif %}>3 months (Max: max)</option>
-            </select>
-
-            <label for="graph_type">Select Graph Type:</label>
-            <select id="graph_type" name="graph_type" required>
-                <option value="closing_price" {% if graph_type == "closing_price" %}selected{% endif %}>Closing Price</option>
-                <option value="candlestick" {% if graph_type == "candlestick" %}selected{% endif %}>Candlestick</option>
-                <option value="both" {% if graph_type == "both" %}selected{% endif %}>Both</option>
-            </select>
-
-            <button type="submit" name="action" value="graph">Graph Data</button>
+    <div class="container">
+        <h1>Stock Price Prediction App</h1>
+        <form id="search-form">
+            <input type="text" id="ticker" name="ticker" placeholder="Enter Stock Ticker" required>
+            <button type="submit">Search</button>
         </form>
-    {% endif %}
+        <div id="results">
+            <!-- Results will be dynamically added here -->
+        </div>
+    </div>
 
-    <!-- Render Chart -->
-    {% if chart_html %}
-        <h2>Historical Stock Data</h2>
-        <div>{{ chart_html|safe }}</div>
-    {% endif %}
+    <script>
+        $(document).ready(function () {
+            $('#search-form').on('submit', function (e) {
+                e.preventDefault();
+                const ticker = $('#ticker').val();
+                $('#results').html('<p>Loading...</p>');
 
-    <!-- Indicators Section -->
-    {% if stock_data or sma_chart_html %}
-        <h2>Indicator Analysis</h2>
-        <form method="post" action="/">
-            <input type="hidden" name="ticker" value="{{ ticker_symbol }}">
+                $.post('/search', { ticker: ticker }, function (data) {
+                    let stockInfoHtml = `
+                        <h2>Company Information</h2>
+                        <p><strong>Company Name:</strong> ${data.stock_info["Company Name"]}</p>
+                        <p><strong>Sector:</strong> ${data.stock_info["Sector"]}</p>
+                        <p><strong>Industry:</strong> ${data.stock_info["Industry"]}</p>
+                        <p><strong>Market Cap:</strong> ${data.stock_info["Market Cap"]}</p>
+                        <p><strong>Stock Exchange:</strong> ${data.stock_info["Stock Exchange"]}</p>
+                        <p><strong>Full-Time Employees:</strong> ${data.stock_info["Full-Time Employees"]}</p>
+                        <p><strong>Business Summary:</strong> ${data.stock_info["Business Summary"]}</p>
+                    `;
 
-            <label for="sma_period">Select SMA Period:</label>
-            <select id="sma_period" name="sma_period" required>
-                <!-- Only periods of at least 6 months -->
-                <option value="6mo" {% if sma_period == "6mo" %}selected{% endif %}>6 months</option>
-                <option value="1y" {% if sma_period == "1y" %}selected{% endif %}>1 year</option>
-                <option value="2y" {% if sma_period == "2y" %}selected{% endif %}>2 years</option>
-                <option value="5y" {% if sma_period == "5y" %}selected{% endif %}>5 years</option>
-                <option value="10y" {% if sma_period == "10y" %}selected{% endif %}>10 years</option>
-                <option value="ytd" {% if sma_period == "ytd" %}selected{% endif %}>Year to Date</option>
-                <option value="max" {% if sma_period == "max" %}selected{% endif %}>Max</option>
-            </select>
-
-            <label for="sma_interval">Select SMA Interval:</label>
-            <select id="sma_interval" name="sma_interval" required>
-                <!-- Only intervals of at least 1 day -->
-                <option value="1d" {% if sma_interval == "1d" %}selected{% endif %}>1 day</option>
-                <option value="5d" {% if sma_interval == "5d" %}selected{% endif %}>5 days</option>
-                <option value="1wk" {% if sma_interval == "1wk" %}selected{% endif %}>1 week</option>
-                <option value="1mo" {% if sma_interval == "1mo" %}selected{% endif %}>1 month</option>
-                <option value="3mo" {% if sma_interval == "3mo" %}selected{% endif %}>3 months</option>
-            </select>
-
-            <button type="submit" name="action" value="sma_analysis">Get SMA Analysis</button>
-        </form>
-    {% endif %}
-
-    <!-- Render SMA Chart and Opinion -->
-    {% if sma_chart_html %}
-        <h2>SMA Analysis</h2>
-        <div>{{ sma_chart_html|safe }}</div>
-
-        {% if sma_last_row %}
-            <h3>Last SMA Values</h3>
-            <ul>
-                {% for key, value in sma_last_row.items() %}
-                    <li><strong>{{ key }}:</strong> {{ value }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        {% if sma_opinion %}
-            <h3>Opinion:</h3>
-            <p>{{ sma_opinion }}</p>
-        {% endif %}
-    {% endif %}
-
+                    let resultsHtml = `
+                        ${stockInfoHtml}
+                        <h3>Closing Prices</h3>
+                        ${data.closing_prices_plot}
+                        <h3>SMA (20, 50)</h3>
+                        <p>${data.sma_opinion}</p>
+                        ${data.sma_plot}
+                        <h3>RSI</h3>
+                        <p>${data.rsi_opinion}</p>
+                        ${data.rsi_plot}
+                        <h3>MACD</h3>
+                        <p>${data.macd_opinion}</p>
+                        ${data.macd_plot}
+                        <h3>Prophet Predictions</h3>
+                        <p>Latest Predicted Price: $${data.prophet_prediction.latest_price.toFixed(2)} on ${data.prophet_prediction.date}</p>
+                        ${data.prophet_plot}
+                    `;
+                    $('#results').html(resultsHtml);
+                }).fail(function (err) {
+                    $('#results').html(`<p>Error: ${err.responseJSON.error}</p>`);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
