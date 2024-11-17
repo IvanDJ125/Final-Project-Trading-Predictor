@@ -1,0 +1,8 @@
+nbformat
+prophet
+pandas
+numpy 
+matplotlib
+yfinance
+plotly
+flask
