@@ -18,6 +18,8 @@ import io
 import base64
 import langdetect
 from langdetect import detect
+import numpy as np
+
 
 # Load environment variables
 load_dotenv('.env')
@@ -30,9 +32,8 @@ API_KEY = os.getenv('API_KEY')
 analyzer = SentimentIntensityAnalyzer()
 
 # Define sentiment analysis function
-
 def sentiment_news_analysis(ticker_symbol):
-    # Fetch news articles for the given ticker symbol
+    # Fetch weekly articles for the ticker symbol
     today = datetime.now()
     one_week_ago = today - timedelta(days=7)
     from_date = one_week_ago.strftime('%Y-%m-%d')
@@ -88,41 +89,75 @@ def sentiment_news_analysis(ticker_symbol):
 
     df[['sentiment', 'polarity', 'compound']] = df['title'].apply(lambda x: analyze_sentiment(x)).apply(pd.Series)
 
-    # Generate visualizations
-    plt.switch_backend('Agg')  # Required to avoid tkinter errors when Flask is running
-    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
+ # Generate visualizations
+# Define color legend
+    legend_labels = [
+    'Positive (>= 0.05)',
+    'Neutral (-0.05 to 0.05)',
+    'Negative (<= -0.05)'
+    ]
+    legend_colors = ['green', 'gold', 'red']
+    handles = [plt.Line2D([0], [0], color=color, lw=4) for color in legend_colors]
 
-    # Sentiment Distribution Bar Chart
-    sns.barplot(x=df['sentiment'].value_counts().index, y=df['sentiment'].value_counts().values, ax=axes[0])
+# Set up the 1x3 layout for all the visualizations
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))  # 1 row, 3 columns
+
+# Sentiment Distribution Bar Chart
+    sns.barplot(x=df['sentiment'].value_counts().index, 
+            y=df['sentiment'].value_counts().values, 
+            ax=axes[0], 
+            palette=legend_colors)
     axes[0].set_title(f'Sentiment Distribution of {ticker_symbol} News')
     axes[0].set_xlabel('Sentiment')
     axes[0].set_ylabel('Number of Titles')
+    axes[0].tick_params(axis='x', rotation=45)
 
-    # Polarity Histogram
-    sns.histplot(df['polarity'], kde=True, bins=30, color='blue', ax=axes[1])
-    axes[1].set_title(f'Distribution of Polarity Scores for {ticker_symbol} News')
-    axes[1].set_xlabel('Polarity Score')
-    axes[1].set_ylabel('Frequency')
-
-    # Compound Score Histogram
-    sns.histplot(df['compound'], kde=True, bins=30, color='green', ax=axes[2])
-    axes[2].set_title(f'Distribution of Compound Scores for {ticker_symbol} News')
-    axes[2].set_xlabel('Compound Score')
-    axes[2].set_ylabel('Frequency')
-
-    # Pie Chart for Sentiment Proportion
+# Pie Chart for Sentiment Proportion
     sentiment_counts = df['sentiment'].value_counts()
-    axes[3].pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%')
-    axes[3].set_title(f'Sentiment Proportion of {ticker_symbol} News')
+    axes[1].pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%', 
+            colors=legend_colors)
+    axes[1].set_title(f'Sentiment Proportion of {ticker_symbol} News')
 
-    # Save figure to a bytes buffer
-    buffer = io.BytesIO()
+# Average Compound Score Gauge-like Diagram
+# Step 1: Calculate the average compound score
+    avg_compound = df['compound'].mean()
+
+# Step 2: Determine overall sentiment and set color
+    if avg_compound >= 0.05:
+     overall_sentiment = 'Positive'
+     color = 'green'
+    elif avg_compound <= -0.05:
+        overall_sentiment = 'Negative'
+        color = 'red'
+    else:
+        overall_sentiment = 'Neutral'
+        color = 'gold'
+
+# Step 3: Create a gauge-like graphic
+    wedges, _ = axes[2].pie([1], colors=[color], radius=1)
+
+# Add an annotation to indicate the overall sentiment
+    axes[2].text(0, 0.1, overall_sentiment, ha='center', va='center', fontsize=24, fontweight='bold', color=color)
+
+# Add the phrase to state the overall sentiment clearly
+    axes[2].text(0, 0, f"Overall {ticker_symbol} news are {overall_sentiment}.", 
+             ha='center', va='center', fontsize=12, color='black')
+
+    axes[2].set_title(f'Overall Sentiment for {ticker_symbol} News')
+
+# Adjust layout for better spacing
     plt.tight_layout()
+    plt.show()
+
+# Adjust layout and save figure to buffer
+    plt.tight_layout()
+    buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     img_str = base64.b64encode(buffer.getvalue()).decode()
 
     return {"data": df.to_dict(orient='records'), "image": img_str}
+
 
 # Flask route for analysis
 @app.route('/sentiment', methods=['GET'])
@@ -133,21 +168,10 @@ def sentiment():
         return jsonify(result)
     return render_template('sentiment.html', data=result['data'], image=result['image'])
 
-# HTML Template Rendering
+# Home route to render the HTML form
 @app.route('/')
 def home():
-    return '''
-    <html>
-        <body>
-            <h1>Sentiment News Analysis</h1>
-            <form action="/sentiment" method="get">
-                <label for="ticker">Enter Ticker Symbol:</label>
-                <input type="text" id="ticker" name="ticker">
-                <input type="submit" value="Analyze">
-            </form>
-        </body>
-    </html>
-    '''
+    return render_template('sentiment.html')
 
 # Run the Flask app
 if __name__ == '__main__':
