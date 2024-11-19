@@ -11,6 +11,7 @@ from utils.stock_data import get_stock_info
 from utils.closing_price import plot_closing_prices
 from utils.indicators import calculate_smas_and_opinion, calculate_and_plot_rsi, calculate_and_plot_macd
 from utils.prophet_model import predict_and_plot_prophet
+from utils.sentiment_analysis import sentiment_news_analysis
 
 
 app = Flask(__name__)
@@ -60,6 +61,11 @@ def search():
         prophet_result, prophet_fig = predict_and_plot_prophet(ticker, forecast_period=60)
         if "error" in prophet_result:
             return jsonify({"error": prophet_result["error"]}), 400
+        
+         # Perform sentiment analysis
+        sentiment_result = sentiment_news_analysis(ticker)
+        if "error" in sentiment_result:
+            return jsonify({"error": sentiment_result["error"]}), 400
 
         # Combine all results and plots into a single response
         return jsonify({
@@ -77,10 +83,13 @@ def search():
                 "date": prophet_result["latest_date"]
             },
             "prophet_plot": prophet_fig.to_html(full_html=False),
-        })
+            "sentiment_distribution": sentiment_result["distribution_html"],
+            "sentiment_proportion": sentiment_result["proportion_html"],
+            "sentiment_summary": sentiment_result["summary_html"]
+    })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
