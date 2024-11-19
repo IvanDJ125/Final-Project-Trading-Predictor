@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+=======
+
+ 
+beautifulsoup4
+PyMuPDF
+PyPDF2
+openai
+numpy
+tiktoken
+python-dotenv
+scikit-learn
+requests
+pdfkit
+pandas
+transformers
+yfinance
+fpdf
+feedparser
+>>>>>>> Quentin
 nbformat==5.10.4
 prophet==1.1.6
 pandas==2.2.3
@@ -20,4 +40,21 @@ vadersentiment==3.3.2
 regex==2024.11.6 
 newsapi==0.1.1 
 langdetect==1.0.9 
+<<<<<<< HEAD
 newsapi-python==0.2.7
+=======
+newsapi-python==0.2.7
+beautifulsoup4==4.12.3
+PyMuPDF==1.24.13
+PyPDF2==3.0.1
+openai==1.54.4
+tiktoken==0.8.0
+python-dotenv==1.0.1
+scikit-learn==1.5.2
+requests==2.32.3
+pdfkit==1.0.0
+transformers==4.46.2
+fpdf==1.7.2
+feedparser==6.0.11
+
+>>>>>>> Quentin
