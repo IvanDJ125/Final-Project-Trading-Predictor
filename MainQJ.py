@@ -20,11 +20,11 @@ import os
 from fpdf import FPDF
 import feedparser
 import ssl
-from utils.Rag_projectmain import answer, ticker_symbol, question 
+from utils.Rag_projectmain import answer, question 
 
 
 # Add the absolute path where config.py is located
-sys.path.append('/Users/qtjefferies/4Geeks-RAG-Example/RAG_Files/Main.py')
+sys.path.append('/Users/qtjefferies/4Geeks-RAG-Example/RAG_Files/MainQJ.py')
 
 # Import the variable from config.py
 

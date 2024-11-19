@@ -7,7 +7,6 @@
 
 # Import Dependencies
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from utils.prophet_model_dataframe import predict_and_plot_df    
 from flask import Flask, request, jsonify, render_template
 from bs4 import BeautifulSoup
 import fitz  # PyMuPDF
@@ -44,7 +43,7 @@ import re
 
 # In[25]:
 
-ticker_symbol = input("Input ticker symbol: ")
+ticker_symbol = input("Input ticker symbol: ").strip()
 
 
 
@@ -149,7 +148,7 @@ def sentiment_news_analysis(ticker_symbol):
 # import sys sys.exit()
 
 
-print(predict_and_plot_df(ticker_symbol, forecast_period=30))
+# predict_and_plot_df(ticker_symbol, forecast_period=30)
 
 
 
@@ -171,14 +170,14 @@ def save_financial_data_to_string(ticker):
         cash_flow = company.cashflow.astype(str).to_string()
         company_overview = company.info
         sentiment_analysis_df = json.dumps(sentiment_news_analysis(ticker), indent=4)
-        price_data_str = company.history(period="2y").astype(str).to_string()
+        price_data = company.history(period="2y").astype(str).to_string()
         # prediction_str = predict_and_plot_df(ticker, forecast_period=30)
-        predictions_df = predict_and_plot_df(ticker_symbol, forecast_period=30)
-        data, columns = predictions_df
-        predictions_df = pd.DataFrame(predict_and_plot_df(ticker_symbol, forecast_period=30))
+        # predictions_df = predict_and_plot_df(ticker_symbol, forecast_period=30)
+        # data, columns = predictions_df
+        # predictions_df = pd.DataFrame(predict_and_plot_df(ticker_symbol, forecast_period=30))
         # predictions_df = predictions_df.applymap(lambda x: x.strftime('%Y-%m-%d') if hasattr(x, 'strftime') else x)
         # predictions_df_str = json.dumps(predictions_df.to_dict(orient='records'), indent=4)
-        predictions_df_str = predictions_df.to_string()
+        # predictions_df_str = predictions_df.to_string()
         company_overview_str = ""
         # company_overview_str = f"Address: {company_overview[0]}, {company_overview['city']}, {company_overview['state']}, {company_overview['zip']}, {company_overview['country']}\n"
         company_overview_str += f"Website: {company_overview['website']}\n"
@@ -193,15 +192,15 @@ def save_financial_data_to_string(ticker):
         complete_company_report += income_statement
         complete_company_report += balance_sheet
         complete_company_report += cash_flow
-        complete_company_report += price_data_str
+     
         complete_company_report += sentiment_analysis_df
-        complete_company_report += predictions_df_str
+        complete_company_report += price_data
     else:
         price_data = company.history(period="2y").astype(str).to_string()
         return price_data
     
 
-    return str(price_data_str)
+    return str(complete_company_report)
     
   
 
@@ -350,12 +349,12 @@ def ask_question(question):
         {
             "role": "system",
             "content": (
-                f"Always mention the current price of the stock first as of the most recent closing date."
+                f"Always mention the current price of the {ticker_symbol} first as of the most recent closing date."
+                f"The pricing data is in ascending order based on the date and the date is in YYYY-MM-DD format."
                 f"Always finish the last sentence of the response."
                 f"You are a Hedge Fund manager offering investment price and outlook analysis and outlook without using the word recommendation. "
                 f"The current date is {today_date}. Based on the following context: {context}, "
                 f"Ensure your response completes every thought and forms full, grammatically correct sentences. The last sentence must be conclusive and not leave any thought unfinished."
-                f"The pricing data is in ascending order based on the date and the date is in YYYY-MM-DD format."
                 f"Always include news and sentiment analysis and sentiment score as part of the analysis. Include the news impacting the sentiment score."
                 "Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."
             )

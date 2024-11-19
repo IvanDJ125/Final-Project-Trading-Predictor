@@ -7,11 +7,6 @@
 
 # Import Dependencies
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-<<<<<<< HEAD
-from utils.prophet_model_dataframe import predict_and_plot_df    
-=======
-from utils.prophet_model import predict_and_plot_df    
->>>>>>> origin/Ivan
 from flask import Flask, request, jsonify, render_template
 from bs4 import BeautifulSoup
 import fitz  # PyMuPDF
@@ -48,7 +43,7 @@ import re
 
 # In[25]:
 
-ticker_symbol = input("Input ticker symbol: ")
+ticker_symbol = input("Input ticker symbol: ").strip()
 
 
 
@@ -177,17 +172,12 @@ def save_financial_data_to_string(ticker):
         sentiment_analysis_df = json.dumps(sentiment_news_analysis(ticker), indent=4)
         price_data_str = company.history(period="2y").astype(str).to_string()
         # prediction_str = predict_and_plot_df(ticker, forecast_period=30)
-        predictions_df = predict_and_plot_df(ticker_symbol, forecast_period=30)
-        data, columns = predictions_df
-<<<<<<< HEAD
-        predictions_df = pd.DataFrame(predict_and_plot_df(ticker_symbol, forecast_period=30))
-=======
-        predictions_df = pd.DataFrame(data, columns=columns)
+        # predictions_df = predict_and_plot_df(ticker_symbol, forecast_period=30)
+        # data, columns = predictions_df
         # predictions_df = pd.DataFrame(predict_and_plot_df(ticker_symbol, forecast_period=30))
->>>>>>> origin/Ivan
         # predictions_df = predictions_df.applymap(lambda x: x.strftime('%Y-%m-%d') if hasattr(x, 'strftime') else x)
         # predictions_df_str = json.dumps(predictions_df.to_dict(orient='records'), indent=4)
-        predictions_df_str = predictions_df.to_string()
+        # predictions_df_str = predictions_df.to_string()
         company_overview_str = ""
         # company_overview_str = f"Address: {company_overview[0]}, {company_overview['city']}, {company_overview['state']}, {company_overview['zip']}, {company_overview['country']}\n"
         company_overview_str += f"Website: {company_overview['website']}\n"
@@ -204,13 +194,13 @@ def save_financial_data_to_string(ticker):
         complete_company_report += cash_flow
         complete_company_report += price_data_str
         complete_company_report += sentiment_analysis_df
-        complete_company_report += predictions_df_str
+        # complete_company_report += predictions_df_str
     else:
         price_data = company.history(period="2y").astype(str).to_string()
         return price_data
     
 
-    return str(price_data_str)
+    return str(complete_company_report)
     
   
 
@@ -354,7 +344,6 @@ def ask_question(question):
    
 
     response = client.chat.completions.create(
-<<<<<<< HEAD
     model="gpt-4o-mini",
     messages=[
         {
@@ -374,22 +363,6 @@ def ask_question(question):
     max_tokens=250,
     temperature=0.2
 )
-=======
-        model="gpt-4o-mini",
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    f"You are a Hedge Fund manager offering investment price and outlook analysis and recommendations. "
-                    f"The current date is {today_date}. Based on the following context: {context}, "
-                    f"provide a complete and concise answer to the question: {question}. "
-                    "Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."
-                )
-            }
-        ],
-        max_tokens=250
-    )
->>>>>>> origin/Ivan
         
     return response.choices[0].message.content
 
@@ -423,19 +396,9 @@ upload_chunks_to_local_memory(chunks)
 # In[22]:
 
 
-<<<<<<< HEAD
 
 question = input(f"Ask me about {ticker_symbol}: ")
 answer = ask_question(question)
-=======
-question = input(f"Ask me about {ticker_symbol}: ")
-
-try: 
-    answer = ask_question(question)
-    print(answer)
-except openai.error.RateLimitError as e:
-    print(f"RateLimitError: {e}. You have exceeded your current quota. Please check your plan and billing details. Display trading volume")
->>>>>>> origin/Ivan
 
 
 # In[ ]:

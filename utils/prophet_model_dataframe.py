@@ -6,6 +6,11 @@ import warnings
 from prophet import Prophet
 from utils.stock_data import get_stock_data
 import plotly.graph_objects as go
+import logging
+
+# Suppress cmdstanpy logs
+logging.getLogger('cmdstanpy').setLevel(logging.CRITICAL)
+logging.getLogger('cmdstanpy').propagate = False
 # Suppress all warnings
 warnings.filterwarnings("ignore")
 
