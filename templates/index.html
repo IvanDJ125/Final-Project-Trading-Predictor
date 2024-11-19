@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Price Prediction</title>
+    <title>Trading Buddy</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .header {
+            display: flex;
+            align-items: center; /* Align the image and text vertically */
+            gap: 15px; /* Add spacing between the image and the text */
+            margin-bottom: 20px; /* Add space below the header */
+        }
+        .header img {
+            width: 100px; /* Adjust the image width */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .header h1 {
+            margin: 0; /* Remove extra margin from the header text */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Stock Price Prediction App</h1>
+        <!-- Header with logo and title -->
+        <div class="header">
+            <img src="/static/images/trading_buddy_logo.jpg" alt="Trading Buddy Logo">
+            <h1>Trading Buddy</h1>
+        </div>
+        
+        <!-- Search form -->
         <form id="search-form">
             <input type="text" id="ticker" name="ticker" placeholder="Enter Stock Ticker" required>
-            <button type="submit">Search</button>
+            <button type="submit">To the moon!!! 🚀</button>
         </form>
+
+        <!-- Results Section -->
         <div id="results">
             <!-- Results will be dynamically added here -->
         </div>
@@ -38,22 +61,35 @@
                         <p><strong>Business Summary:</strong> ${data.stock_info["Business Summary"]}</p>
                     `;
 
+                    let prophetHtml = `
+                        <h3>Prophet Model Predictions 🔮</h3>
+                        <p><strong>Latest Predicted Price:</strong> $${data.prophet_prediction.latest_price.toFixed(2)} (as of ${new Date(data.prophet_prediction.date).toLocaleDateString()})</p>
+                        <div id="prophet-plot">
+                            ${data.prophet_plot}
+                        </div>
+                    `;
+
                     let resultsHtml = `
                         ${stockInfoHtml}
-                        <h3>Closing Prices</h3>
+                        <h2>Daily Closing Prices</h2>
                         ${data.closing_prices_plot}
-                        <h3>SMA (20, 50)</h3>
+                        <h3>Indicators 📈📉📊</h3>
+                        <h3>Simple Moving Average (20 & 50 days)</h3>
                         <p>${data.sma_opinion}</p>
                         ${data.sma_plot}
-                        <h3>RSI</h3>
+                        <h3>Relative Strength Index</h3>
                         <p>${data.rsi_opinion}</p>
                         ${data.rsi_plot}
-                        <h3>MACD</h3>
+                        <h3>Moving Average Convergance & Divergance (MACD)</h3>
                         <p>${data.macd_opinion}</p>
                         ${data.macd_plot}
-                        <h3>Prophet Predictions</h3>
-                        <p>Latest Predicted Price: $${data.prophet_prediction.latest_price.toFixed(2)} on ${data.prophet_prediction.date}</p>
-                        ${data.prophet_plot}
+                        ${prophetHtml}
+                        <h3>Sentiment Analysis 🚦</h3>
+                        <div class="sentiment-charts">
+                            <div class="chart">${data.sentiment_distribution}</div>
+                            <div class="chart">${data.sentiment_proportion}</div>
+                            <div class="chart">${data.sentiment_summary}</div>
+                        </div>
                     `;
                     $('#results').html(resultsHtml);
                 }).fail(function (err) {
