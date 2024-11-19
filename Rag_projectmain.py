@@ -6,15 +6,19 @@
 
 
 # Import Dependencies
-#%pip install 
-#%pip install feedparser
-#%pip install ssl
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from utils.prophet_model import predict_and_plot_df    
+from flask import Flask, request, jsonify, render_template
 from bs4 import BeautifulSoup
 import fitz  # PyMuPDF
 import openai
+import sys
 import numpy as np
 from openai import OpenAI
 import os
+import base64
+import io
+import json
 from tiktoken import get_encoding
 from dotenv import load_dotenv
 #%pip install scikit-learn
@@ -30,6 +34,9 @@ import os
 from fpdf import FPDF
 import feedparser
 import ssl
+from datetime import datetime, timedelta
+from utils.sentiment_analysis import sentiment_news_analysis, TextBlob, detect
+import re
 
 
 
@@ -59,11 +66,6 @@ else: #get crypyo info
 
 
 
-
-# ### Get 2024 Financial Statements Only
-
-# In[27]:
-
 def save_crypto_data_to_pdf(ticker):
     if 'usd' in ticker.lower():
         price_data_str = price_data.to_string()
@@ -72,22 +74,112 @@ def save_crypto_data_to_pdf(ticker):
         return None
    
 
+analyzer = SentimentIntensityAnalyzer()
+
+def sentiment_news_analysis(ticker_symbol):
+
+    load_dotenv()
+    API_KEY = os.getenv("API_KEY")
+    
+    # Fetch news articles for the given ticker symbol
+    today = datetime.now()
+    one_week_ago = today - timedelta(days=7)
+    from_date = one_week_ago.strftime('%Y-%m-%d')
+    to_date = today.strftime('%Y-%m-%d')
+
+    url = f"https://newsapi.org/v2/everything?q={ticker_symbol}&from={from_date}&to={to_date}&sortBy=popularity&apiKey={API_KEY}"
+    response = requests.get(url)
+    # print(response.reason)
+
+    if response.status_code != 200:
+        return {"error": "Failed to retrieve data", "status_code": response.status_code}
+
+    # Parse the JSON data and normalize it
+    data = response.json()
+    articles = data.get('articles', [])
+    df = pd.json_normalize(articles)
+
+    # Filter for required columns and rename them
+    df = df[['source.name', 'title', 'publishedAt']]
+    df.rename(columns={'source.name': 'source', 'publishedAt': 'date'}, inplace=True)
+    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y/%m/%d')
+
+    # Filter only English titles
+    def is_english(text):
+        try:
+            return detect(text) == 'en'
+        except:
+            return False
+
+    df = df[df['title'].apply(is_english)]
+
+    # Preprocess text
+    def preprocess_text(text):
+        text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
+        text = re.sub(r'\@\w+|\#|\d+', '', text)
+        text = re.sub(r'[^\w\s]', '', text)
+        return text.lower()
+
+    df['title'] = df['title'].apply(preprocess_text)
+
+    # Analyze sentiment
+    def analyze_sentiment(text):
+        blob = TextBlob(text)
+        polarity = blob.sentiment.polarity
+        vader_score = analyzer.polarity_scores(text)
+        compound = vader_score['compound']
+        if compound >= 0.05:
+            sentiment = 'positive'
+        elif compound <= -0.05:
+            sentiment = 'negative'
+        else:
+            sentiment = 'neutral'
+        return sentiment, polarity, compound
+    df[['sentiment', 'polarity', 'compound']] = df['title'].apply(lambda x: analyze_sentiment(x)).apply(pd.Series)
+
+    
+    buffer = io.BytesIO()
+    buffer.seek(0)
+    img_str = base64.b64encode(buffer.getvalue()).decode()
+    return {"data": df.to_dict(orient='records'), "image": img_str}
+
+# Testing NLP 
+# print(sentiment_news_analysis(ticker_symbol))
+
+# import sys sys.exit()
+
+
+print(predict_and_plot_df(ticker_symbol, forecast_period=30))
+
+
+
+# import sys
+# sys.exit()
+
+
 
 
 def save_financial_data_to_string(ticker):
     # Fetch financial data using yfinance
     company = yf.Ticker(ticker)
+    # price_data = company.history(period="1y").astype(str).to_string()
+
     
     if 'usd' not in ticker.lower(): 
         income_statement = company.financials.astype(str).to_string()
         balance_sheet = company.balance_sheet.astype(str).to_string()
         cash_flow = company.cashflow.astype(str).to_string()
         company_overview = company.info
-        price_data = company.history(period="2y").astype(str).to_string()
-   
+        sentiment_analysis_df = json.dumps(sentiment_news_analysis(ticker), indent=4)
+        price_data_str = company.history(period="2y").astype(str).to_string()
+        # prediction_str = predict_and_plot_df(ticker, forecast_period=30)
+        predictions_df = predict_and_plot_df(ticker_symbol, forecast_period=30)
         
-
-
+        # predictions_df = pd.DataFrame(data, columns=columns)
+        predictions_df = pd.DataFrame(predict_and_plot_df(ticker_symbol, forecast_period=30))
+        # predictions_df = predictions_df.applymap(lambda x: x.strftime('%Y-%m-%d') if hasattr(x, 'strftime') else x)
+        # predictions_df_str = json.dumps(predictions_df.to_dict(orient='records'), indent=4)
+        predictions_df_str = predictions_df.to_string()
         company_overview_str = ""
         # company_overview_str = f"Address: {company_overview[0]}, {company_overview['city']}, {company_overview['state']}, {company_overview['zip']}, {company_overview['country']}\n"
         company_overview_str += f"Website: {company_overview['website']}\n"
@@ -102,23 +194,21 @@ def save_financial_data_to_string(ticker):
         complete_company_report += income_statement
         complete_company_report += balance_sheet
         complete_company_report += cash_flow
-        complete_company_report += price_data
+        complete_company_report += price_data_str
+        complete_company_report += sentiment_analysis_df
+        complete_company_report += predictions_df_str
     else:
         price_data = company.history(period="2y").astype(str).to_string()
         return price_data
     
 
-    return str(complete_company_report)
+    return str(price_data_str)
     
-    # # Save the PDF in the folder
-    # pdf_file_path = os.path.join(folder_path, f"{ticker}_financials.pdf")
-    # pdf.output(pdf_file_path)
+  
 
-    #print(f"PDF saved successfully at: {pdf_file_path}")    
+# save_financial_data_to_string(ticker_symbol)
 
-save_financial_data_to_string(ticker_symbol)
-
-
+# sys.exit()
 # In[11]:
 
 
@@ -145,7 +235,6 @@ else:
     save_financial_data_to_string(ticker_symbol)
 
 
-# 
 
 # ## Create RAG
 
@@ -207,25 +296,6 @@ def upload_chunks_to_local_memory(text_chunks):
         }
 
 
-# ### Extract Text from PDF
-
-# In[18]:
-
-
-# # Function to extract text from the PDF
-# def extract_text_from_pdf(pdf_file):
-#     with open(pdf_file, 'rb') as file:
-#         reader = PyPDF2.PdfReader(file)
-#         text = ''
-#         for page_num in range(len(reader.pages)):
-#             page = reader.pages[page_num]
-#             text += page.extract_text()
-#     return text
-
-
-# ### Chunk text into smaller pieces
-
-# In[19]:
 
 
 # Function to chunk the text into smaller pieces
@@ -262,15 +332,38 @@ def ask_question(question):
     context = " ".join([match['text'] for match in result])
     
     # Updated OpenAI API call for chat models using `ChatCompletion.create` method
+    # response = client.chat.completions.create(
+    #     model="gpt-4o-mini",
+    #     messages=[
+    #         {"role": "system", "content": f"You are a Hedge Fund manager offering investment price and outlook analysis and recommendations. Based on the following context: {context}, provide a complete and concise answer to the question: {question}. Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."}
+
+    #     ],
+    #     max_tokens=200
+    # )
+    # Get today's date
+    today_date = datetime.now().strftime("%Y-%m-%d")
+
+   
+
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": f"You are a Hedge Fund manager offering investment price and outlook analysis and recommendations. Based on the following context: {context}, provide a complete and concise answer to the question: {question}. Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."}
-
+            {
+                "role": "system",
+                "content": (
+                    f"You are a Hedge Fund manager offering investment price and outlook analysis and outlook without using the word recommendation. "
+                    f"The current date is {today_date}. Based on the following context: {context}, "
+                    f"provide a complete and concise answer to the question: {question}. "
+                    f"The pricing data is in ascending order based on the date and the date is in YYYY-MM-DD format."
+                    f"Always include news and sentiment analysis and sentiment score as part of the analysis. Include the news impacting the sentiment score."
+                    "Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."
+                )
+            }
         ],
-        max_tokens=200
+        max_tokens=250,
+        temperature=0.2
     )
-    
+        
     return response.choices[0].message.content
 
     
