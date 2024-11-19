@@ -20,7 +20,7 @@ import os
 from fpdf import FPDF
 import feedparser
 import ssl
-from Rag_projectmain import answer, ticker_symbol, question 
+from utils.Rag_projectmain import answer, ticker_symbol, question 
 
 
 # Add the absolute path where config.py is located
