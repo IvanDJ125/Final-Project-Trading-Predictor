@@ -354,14 +354,14 @@ def ask_question(question):
                 f"Always finish the last sentence of the response."
                 f"You are a Hedge Fund manager offering investment price and outlook analysis and outlook without using the word recommendation. "
                 f"The current date is {today_date}. Based on the following context: {context}, "
-                f"provide a complete and concise answer to the question: {question} without trailing off at the end. "
+                f"Ensure your response completes every thought and forms full, grammatically correct sentences. The last sentence must be conclusive and not leave any thought unfinished."
                 f"The pricing data is in ascending order based on the date and the date is in YYYY-MM-DD format."
                 f"Always include news and sentiment analysis and sentiment score as part of the analysis. Include the news impacting the sentiment score."
                 "Ensure your response forms a full, coherent thought and does not trail off, staying within the character limit."
             )
         }
     ],
-    max_tokens=250,
+    max_tokens=350,
     temperature=0.2
 )
         
